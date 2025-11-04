@@ -3,7 +3,7 @@ import { getPosts, createPost } from "./api";
 
 export default function App() {
   const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState({ title: "", content: "" });
+  const [newPost, setNewPost] = useState({ author: "", content: "" });
 
   // Fetch posts
   const fetchPosts = async () => {
@@ -25,7 +25,7 @@ export default function App() {
     try {
       await createPost(newPost);
       alert("Post created successfully!");
-      setNewPost({ title: "", content: "" });
+      setNewPost({ author: "", content: "" });
       fetchPosts();
     } catch (error) {
       console.error("Failed to create post:", error);
@@ -39,14 +39,14 @@ export default function App() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Title"
-          value={newPost.title}
-          onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+          placeholder="Author"
+          value={newPost.author}
+          onChange={(e) => setNewPost({ ...newPost, author: e.target.value })}
           required
           style={{ display: "block", width: "100%", marginBottom: "1rem" }}
         />
         <textarea
-          placeholder="Content"
+          placeholder="What's on your mind?"
           value={newPost.content}
           onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
           required
@@ -62,7 +62,7 @@ export default function App() {
         <ul>
           {posts.map((post) => (
             <li key={post.id}>
-              <b>{post.title}</b>: {post.content}
+              <b>{post.author}</b>: {post.content}
             </li>
           ))}
         </ul>
