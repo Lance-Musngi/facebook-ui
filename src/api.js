@@ -13,13 +13,18 @@ export async function createPost(postData) {
     body: JSON.stringify(postData),
   });
 
-  // If status is not OK (200–299), throw error
-  if (!res.ok) throw new Error("Failed to create post");
+  if (!res.ok) {
+    console.error("Response not OK:", res.status, res.statusText);
+    throw new Error("Failed to create post");
+  }
 
-  // Safely handle cases where backend returns no JSON
+  // ✅ Handle empty response body safely
+  const text = await res.text();
+  if (!text) return null; // Backend returned no content
   try {
-    return await res.json();
-  } catch {
-    return null; // Backend returned no content (e.g., 201 Created without body)
+    return JSON.parse(text);
+  } catch (err) {
+    console.warn("Response was not valid JSON:", err);
+    return null;
   }
 }
