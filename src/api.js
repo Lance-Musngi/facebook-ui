@@ -13,18 +13,11 @@ export async function createPost(postData) {
     body: JSON.stringify(postData),
   });
 
-  if (!res.ok) {
-    console.error("Response not OK:", res.status, res.statusText);
-    throw new Error("Failed to create post");
-  }
+  if (!res.ok) throw new Error("Failed to create post");
+  return res.json();
+}
 
-  // ✅ Handle empty response body safely
-  const text = await res.text();
-  if (!text) return null; // Backend returned no content
-  try {
-    return JSON.parse(text);
-  } catch (err) {
-    console.warn("Response was not valid JSON:", err);
-    return null;
-  }
+export async function deletePost(id) {
+  const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to delete post");
 }

@@ -1,38 +1,28 @@
-import React from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../api';
-
-function PostList({ posts, setPosts }) {
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this post?")) return;
-
-    try {
-      await axios.delete(`${API_BASE_URL}/posts/${id}`);
-      setPosts(posts.filter(post => post.id !== id));
-    } catch (error) {
-      console.error("Error deleting post:", error);
-      alert("Failed to delete post. Try again later.");
-    }
-  };
-
+export default function PostList({ posts, onDelete }) {
   return (
-    <div>
-      <h3>All Posts</h3>
-      <ul>
-        {posts.map(post => (
-          <li key={post.id} className="post-card">
-            <div className="post-content">
-              <div className="post-author">{post.author}</div>
-              <div className="post-text">{post.content}</div>
+    <div className="post-list">
+      <h2>All Posts</h2>
+      {posts.length === 0 ? (
+        <p className="empty">No posts found.</p>
+      ) : (
+        posts.map((post) => (
+          <div key={post.id} className="post-card">
+            <div className="post-header">
+              <h3>{post.author}</h3>
+              <button
+                className="delete-btn"
+                onClick={() => onDelete(post.id)}
+              >
+                ✕
+              </button>
             </div>
-            <button className="remove-btn" onClick={() => handleDelete(post.id)}>
-              Remove
-            </button>
-          </li>
-        ))}
-      </ul>
+            <p className="post-content">{post.content}</p>
+            <p className="post-date">
+              {new Date(post.createdAt).toLocaleString()}
+            </p>
+          </div>
+        ))
+      )}
     </div>
   );
 }
-
-export default PostList;

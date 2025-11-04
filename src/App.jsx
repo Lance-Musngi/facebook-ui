@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { getPosts, createPost } from "./api";
+import { getPosts, createPost, deletePost } from "./api";
+import PostForm from "./components/PostForm";
+import PostList from "./components/PostList";
+import "./App.css";
 
 export default function App() {
   const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState({ author: "", content: "" });
 
-  // Fetch posts
   const fetchPosts = async () => {
     try {
       const data = await getPosts();
@@ -19,54 +20,22 @@ export default function App() {
     fetchPosts();
   }, []);
 
-  // Handle form submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
-      await createPost(newPost);
-      alert("Post created successfully!");
-      setNewPost({ author: "", content: "" });
-      fetchPosts();
+      await deletePost(id);
+      setPosts(posts.filter((p) => p.id !== id));
     } catch (error) {
-      console.error("Failed to create post:", error);
-      alert("Failed to create post");
+      alert("Failed to delete post");
+      console.error(error);
     }
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "2rem auto" }}>
-      <h2>Add a New Post</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Author"
-          value={newPost.author}
-          onChange={(e) => setNewPost({ ...newPost, author: e.target.value })}
-          required
-          style={{ display: "block", width: "100%", marginBottom: "1rem" }}
-        />
-        <textarea
-          placeholder="What's on your mind?"
-          value={newPost.content}
-          onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-          required
-          style={{ display: "block", width: "100%", marginBottom: "1rem" }}
-        />
-        <button type="submit">Submit</button>
-      </form>
-
-      <h3>All Posts</h3>
-      {posts.length === 0 ? (
-        <p>No posts found.</p>
-      ) : (
-        <ul>
-          {posts.map((post) => (
-            <li key={post.id}>
-              <b>{post.author}</b>: {post.content}
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="app-container">
+      <h1>Facebook Clone</h1>
+      <PostForm onPostCreated={fetchPosts} />
+      <PostList posts={posts} onDelete={handleDelete} />
     </div>
   );
 }
