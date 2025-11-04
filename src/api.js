@@ -1,4 +1,4 @@
-const API_URL = "https://facebookapi-u5ih.onrender.com/api/posts";
+const API_URL = "https://facebook-api-8vmy.onrender.com/api/posts";
 
 export async function getPosts() {
   const res = await fetch(API_URL);
