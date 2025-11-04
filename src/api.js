@@ -12,6 +12,14 @@ export async function createPost(postData) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(postData),
   });
+
+  // If status is not OK (200–299), throw error
   if (!res.ok) throw new Error("Failed to create post");
-  return res.json();
+
+  // Safely handle cases where backend returns no JSON
+  try {
+    return await res.json();
+  } catch {
+    return null; // Backend returned no content (e.g., 201 Created without body)
+  }
 }
