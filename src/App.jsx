@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getPosts, createPost, deletePost } from "./api";
 import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
-import "./App.css";
+import "../App.css";
 
 export default function App() {
   const [posts, setPosts] = useState([]);
