@@ -33,7 +33,7 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <h1>Facebook Clone</h1>
+      <h1>Facebook</h1>
       <PostForm onPostCreated={fetchPosts} />
       <PostList posts={posts} onDelete={handleDelete} />
     </div>
