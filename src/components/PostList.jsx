@@ -9,14 +9,22 @@ export default function PostList({ posts, onDelete }) {
           <div key={post.id} className="post-card">
             <div className="post-header">
               <h3>{post.author}</h3>
-              <button
-                className="delete-btn"
-                onClick={() => onDelete(post.id)}
-              >
+              <button className="delete-btn" onClick={() => onDelete(post.id)}>
                 ✕
               </button>
             </div>
             <p className="post-content">{post.content}</p>
+
+            {/* Show image if available */}
+            {post.imageUrl && (
+              <img
+                src={post.imageUrl}
+                alt="Post"
+                className="post-image"
+                onError={(e) => (e.target.style.display = "none")}
+              />
+            )}
+
             <p className="post-date">
               {new Date(post.createdAt).toLocaleString()}
             </p>
